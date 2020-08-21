@@ -104,12 +104,11 @@ Emits:
         })
 
 */
-import { mapState } from 'vuex'
-
 export default {
     name: 'overview-header',
     props: {
         getRelationshipData: { type: Function, required: true },
+        currentServer: { type: Object, required: true },
     },
     data() {
         return {
@@ -127,10 +126,6 @@ export default {
     },
 
     computed: {
-        ...mapState({
-            current_server: state => state.server.current_server,
-        }),
-
         serverStateClass: function() {
             switch (this.$help.serverStateIcon(this.getTopOverviewInfo.state)) {
                 case 0:
@@ -142,7 +137,6 @@ export default {
             }
         },
         getTopOverviewInfo: function() {
-            let overviewInfo = {}
             const {
                 attributes: {
                     state,
@@ -151,9 +145,9 @@ export default {
                     parameters: { address, socket, port } = {},
                 } = {},
                 relationships: { monitors } = {},
-            } = this.current_server
+            } = this.currentServer
 
-            overviewInfo = {
+            let overviewInfo = {
                 address,
                 socket,
                 port,
